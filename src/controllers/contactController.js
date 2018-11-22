@@ -15,7 +15,7 @@ module.exports = {
 	},
 	async store (req, res) {
 		const { name, email, phone, gender } = req.body
-
+		
 		var content = {
 			"name": name,
 			"email": email,
@@ -30,7 +30,7 @@ module.exports = {
 			(err, response, body) => {
 					console.log(body);
 					console.log(response.statusCode);
-					this.show(req, res)
+					return res.redirect('contacts')
 			});
 	}
 }
