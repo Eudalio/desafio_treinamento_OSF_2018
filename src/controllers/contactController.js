@@ -1,84 +1,98 @@
-var request = require('request');
-var axios = require('axios')
+let request = require('request');
+let axios = require('axios')
+let queryString = require('querystring')
 const url = 'https://cryptic-retreat-41638.herokuapp.com/api/contacts';
 const url2 = 'https://f5zg6v0z92.execute-api.us-east-1.amazonaws.com/dev/contacts';
 
-module.exports = {
-	async show (req, res) {
-		axios.default.get(url2)
-		.then(response => {
-			let dados = response.data
-			//console.log(dados)
-			res.render('contacts/show', { contacts: dados })
+module.exports.show = (req, res) => {
+	axios.default.get(url2)
+	.then(response => {
+		res.render('contacts/show', { contacts: response.data })
+	})
+	.catch(error => {
+		res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
 		})
-		.catch(error => {
-			res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
-		 })
-	},
-	renderFormRegister (req, res) {
-		return res.render('contacts/register');
-	},
-	async renderFormUpdate (req, res) {
-		const { id } = req.params
+}
+module.exports.renderFormRegister = (req, res) => {
+	return res.render('contacts/register');
+},
 
-		await axios.default.get(`${url2}/${id}`)
-		.then(response => {
-			//console.log('update: ' + response.data);
-			res.render('contacts/update', {
-				contact: response.data
-			});
-		})
-		.catch(error => {
-			res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
-		})
-	},
-	async store (req, res) {
-		const { name, email, phone, gender } = req.body
-		
-		var content = {
-			"name": name,
-			"email": email,
-			"phone": phone,
-			"gender": gender
-		}
+module.exports.renderFormUpdate = (req, res) => {
+	const { id } = req.params
+	//console.log(req.params)
 
-		await request({
-			uri: url2,
-			json: content,
-			method: 'POST',
-		},
-		(err, response, body) => {
-			//console.log(body);
-			//console.log(response.statusCode);
-			return res.redirect('contacts')
+	axios.default.get(`${url2}/${id}`)
+	.then(response => {
+		if(response.data)
+		res.render('contacts/update', {
+			contact: {id, ...response.data}
 		});
-	},
-	async update(req, res) {
-		const { name, email, phone, gender } = req.body
-		console.log('update params: ' + req.body)
-		console.log('update params: ' + req.params)
-		await request({
-			uri: `${url2}/${req.params.id}`,
-			method: 'PUT',
-			json: {
-				"name": name,
-				"email": email,
-				"phone": phone,
-				"gender": gender
-			}
-		}, (err, response, body) => {
-			console.log(response.data)
-			return res.redirect('contacts')
-		})
-	},
-	async destroy(req, res) {
-		const { id } = req.params
-		//await request.delete(`${url}/${id}`)
-		await axios.default.delete(`${url2}/${id}`).then(response => {
-			//console.log(response.data)
-			return res.redirect('/contacts');
-		}).catch(error => {
-			res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
-		})
+	})
+	.catch(error => {
+		res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
+	})
+}
+module.exports.store = (req, res) => {
+	let contact = {
+		name: req.body.name,
+		email: req.body.email,
+		gender: req.body.gender,
+		phone: req.body.phone
 	}
+	axios.post(url2, contact)
+		.then((response) => {
+			if (response.data) {
+				return res.redirect('/contacts');
+			}
+			res.sendStatus(500);
+		})
+		.catch(error => {
+			res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)			
+		});
+}
+
+module.exports.update = (req, res) => {
+	let contact = {
+		id: req.body._id,
+        name: req.body.name,
+        email: req.body.email,
+        gender: req.body.gender,
+        phone: req.body.phone
+	}
+	axios.default.put(`${url2}/${req.body.custId}`, contact)
+		.then(response => {
+			return res.redirect(`/contacts`);
+		})
+		.catch(error => {
+			res.send(`<h1>testeAconteceu o seguinte problema: ${error}</h1>`)
+		})
+}
+
+module.exports.destroy = (req, res) => {
+	const { id } = req.params
+	axios.default.delete(`${url2}/${id}`)
+	.then(response => {
+		if(response.data) return res.sendStatus(204)
+	})
+	.catch(error => {
+		res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
+	})
+}
+
+module.exports.renderSearch = (req, res) => {
+	return res.render('contacts/search', {})
+}
+
+module.exports.search = (req, res) => {
+	const { id } = req.params
+	axios.default.get(`${url2}/${id}`)
+	.then(response => {
+		if(response.data) {
+			console.log('search: ' + response.data)
+			res.render('contacts/search', { contact: response.data })
+		}
+	})
+	.catch(error => {
+		res.send(`<h1>Aconteceu o seguinte problema: ${error}</h1>`)
+	})
 }

@@ -19,14 +19,17 @@
 </head>
 <body>
     <article>
-        <% console.log(contact) %>
         <div class="main jumbotron">
             <h2>Update Contact Form</h2>
-            <form action="/contacts/<%= contact._id %>" method="PUT" class="form-signin" id="update-form">
+            <form action="/contacts/<%= contact._id %>" method="POST" class="form-signin" id="update-form">
             
                 <div class="form-group">
                     <label for="inputName">First name</label>
                     <input type="text" name="name" value="<%= contact.name %>" id="inputName" class="form-control" placeholder="Insert your first name" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="hidden" id="custId" name="custId" value="<%= contact._id %>">
                 </div>
 
                 <div class="form-group">
@@ -41,7 +44,7 @@
 
                 <div class="form-group">
                     <label for="inputGender">Gender</label>
-                    <select name="gender" class="form-control" id="inputGender">
+                    <select name="gender" class="form-control" id="inputGender" value="<%= contact.gender %>">
                         <option name="Masculino" value="Masculino">Masculino</option>
                         <option name="Feminino" value="Feminino">Feminino</option>
                     </select>
