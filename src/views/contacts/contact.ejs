@@ -26,16 +26,13 @@
         </nav>
     </div>
     <div class="main jumbotron">
-        <h2>Please Sign In</h2>
-        <form action="/contacts/search" method="POST" class="form-signin" id="form-search">
-            <div class="form-group">
-                <input type="text" name="id" id="inputId" class="form-control" placeholder="Insira um ID" required>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
-            </div>
-        </form>
+        <h2>Contact</h2>
+        <ul>
+            <li><b>Nome:</b> <%= contact.name %></li>
+            <li><b>E-mail:</b> <%= contact.email %></li>
+            <li><b>Phone:</b> <%= contact.phone %></li>
+            <li><b>Gender:</b> <%= contact.gender %></li>
+        </ul>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

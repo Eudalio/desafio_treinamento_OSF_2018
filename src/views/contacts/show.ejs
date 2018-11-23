@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Contact List</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal"><b>Contact List - Desafio OSF GLOBAL SERVICES</b></h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <a href="/contacts/create" class="edit btn btn-success"><i class="fa fa-user-plus"> Register</i></a>
             <a class="p-2 text-dark" href="/contacts/search"><i class="fas fa-search"></i> Search</a>
@@ -22,6 +22,8 @@
             <tr>
                 <th scope="col">Nome</th>
                 <th scope="col">E-mail</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Gender</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
@@ -30,6 +32,8 @@
                 <tr>
                     <td><%= contact.name %></td>
                     <td><%= contact.email %></td>
+                    <td><%= contact.phone %></td>
+                    <td><%= contact.gender %></td>
                     <td>
                         <a href="/contacts/update/<%= contact._id %>" class="edit btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
                         <button onClick="deleteContact(`<%=contact._id%>`)" class="delete btn btn-danger"><i class="far fa-trash-alt"></i></button>
